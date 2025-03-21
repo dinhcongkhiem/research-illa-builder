@@ -1,0 +1,136 @@
+version: '3.8'
+
+services:
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - supervisor-backend
+      - illa-builder-backend
+    networks:
+      - illa-network
+
+  supervisor-backend:
+    build:
+      context: ./illa-supervisor-backend
+      dockerfile: Dockerfile
+    ports:
+      - "8003:8003"
+      - "9002:9002"
+    environment:
+      - ILLA_SERVER_HOST=0.0.0.0
+      - ILLA_SERVER_PORT=8003
+      - ILLA_SERVER_INTERNAL_PORT=9002
+      - ILLA_SERVER_MODE=release
+      - ILLA_DEPLOY_MODE=self-host
+      - ILLA_SECRET_KEY=your_secret_key_here
+      - ILLA_SUPERVISOR_PG_ADDR=postgres
+      - ILLA_SUPERVISOR_PG_PORT=5432
+      - ILLA_SUPERVISOR_PG_USER=illa_supervisor
+      - ILLA_SUPERVISOR_PG_PASSWORD=illa2022
+      - ILLA_SUPERVISOR_PG_DATABASE=illa_supervisor
+      - ILLA_REDIS_ADDR=redis
+      - ILLA_REDIS_PORT=6379
+      - ILLA_REDIS_PASSWORD=
+      - ILLA_REDIS_DATABASE=0
+      - ILLA_DRIVE_TYPE=minio
+      - ILLA_DRIVE_ACCESS_KEY_ID=minioadmin
+      - ILLA_DRIVE_ACCESS_KEY_SECRET=minioadmin
+      - ILLA_DRIVE_ENDPOINT=minio:9000
+      - ILLA_DRIVE_SYSTEM_BUCKET_NAME=illa-supervisor
+      - ILLA_DRIVE_TEAM_BUCKET_NAME=illa-supervisor-team
+    depends_on:
+      - postgres
+      - redis
+      - minio
+    networks:
+      - illa-network
+
+  illa-builder-backend:
+    build:
+      context: ./builder-backend
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8001"
+      - "8002:8002"
+      - "9001:9001"
+    environment:
+      - ILLA_PG_ADDR=postgres
+      - ILLA_REDIS_ADDR=redis
+      - ILLA_SERVER_HOST=0.0.0.0
+      - ILLA_WEBSOCKET_SERVER_HOST=0.0.0.0
+      - ILLA_DEPLOY_MODE=self-host
+      - ILLA_SUPERVISOR_INTERNAL_API=http://supervisor-backend:9001/api/v1
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - illa-network
+
+  postgres:
+    image: postgres:14-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=illa2022
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./builder-backend/scripts/postgres-init.sh:/docker-entrypoint-initdb.d/postgres-init.sh
+    ports:
+      - "5432:5432"
+    command: >
+      postgres
+      -c 'max_connections=1000'
+      -c 'shared_buffers=256MB'
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - illa-network
+
+  redis:
+    image: redis:7-alpine
+    volumes:
+      - redis_data:/data
+    expose:
+      - "6379"
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - illa-network
+
+  minio:
+    image: minio/minio
+    environment:
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=minioadmin
+    volumes:
+      - minio_data:/data
+    ports:
+      - "9000:9000"
+      - "9005:9001"
+    command: server /data --console-address ":9001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    networks:
+      - illa-network
+
+networks:
+  illa-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:
+  minio_data: 

@@ -1,0 +1,45 @@
+{
+  "name": "@illa-design/system",
+  "version": "1.1.0",
+  "description": "Illa Design base.",
+  "keywords": [
+    "system",
+    "react",
+    "component"
+  ],
+  "sideEffects": false,
+  "author": "ILLA Cloud <opensource@illasoft.com>",
+  "homepage": "https://github.com/illacloud/illa-design",
+  "license": "Apache-2.0",
+  "main": "src/index.ts",
+  "publishConfig": {
+    "access": "public",
+    "main": "dist/umd/index.js",
+    "module": "dist/es/index.js",
+    "types": "dist/types/index.d.ts",
+    "typings": "dist/types/index.d.ts",
+    "exports": {
+      ".": {
+        "import": "./dist/es/index.js",
+        "require": "./dist/umd/index.js"
+      }
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/illacloud/illa-design.git",
+    "directory": "packages/system"
+  },
+  "bugs": {
+    "url": "https://github.com/illacloud/illa-design/issues"
+  },
+  "dependencies": {
+    "dayjs": "^1.11.7"
+  },
+  "scripts": {
+    "build": "vite build"
+  }
+}

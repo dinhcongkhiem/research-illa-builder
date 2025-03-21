@@ -1,0 +1,57 @@
+{
+  "name": "@illa-design/calendar",
+  "version": "1.1.0",
+  "description": "Illa Design Calendar.",
+  "keywords": [
+    "calendar",
+    "react",
+    "component"
+  ],
+  "sideEffects": false,
+  "author": "ILLA Cloud <opensource@illasoft.com>",
+  "homepage": "https://github.com/illacloud/illa-design",
+  "license": "Apache-2.0",
+  "main": "src/index.ts",
+  "publishConfig": {
+    "access": "public",
+    "main": "dist/umd/index.js",
+    "module": "dist/es/index.js",
+    "types": "dist/types/index.d.ts",
+    "typings": "dist/types/index.d.ts",
+    "exports": {
+      ".": {
+        "import": "./dist/es/index.js",
+        "require": "./dist/umd/index.js"
+      }
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/illacloud/illa-design.git",
+    "directory": "packages/calendar"
+  },
+  "bugs": {
+    "url": "https://github.com/illacloud/illa-design/issues"
+  },
+  "scripts": {
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@illa-design/system": "workspace:*",
+    "@illa-design/theme": "workspace:*",
+    "@illa-design/config-provider": "workspace:*",
+    "@illa-design/icon": "workspace:*",
+    "@illa-design/button": "workspace:*",
+    "@illa-design/radio": "workspace:*",
+    "@illa-design/select": "workspace:*",
+    "dayjs": "^1.11.7"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "@emotion/react": "^11.11.1"
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "name": "@illa-design/date-picker",
+  "version": "1.1.0",
+  "description": "Illa Design Date-Picker.",
+  "keywords": [
+    "date-picker",
+    "react",
+    "component"
+  ],
+  "sideEffects": false,
+  "author": "illa Cloud <opensource@illasoft.com>",
+  "homepage": "https://github.com/illacloud/illa-design",
+  "license": "Apache-2.0",
+  "main": "src/index.ts",
+  "publishConfig": {
+    "access": "public",
+    "main": "dist/umd/index.js",
+    "module": "dist/es/index.js",
+    "types": "dist/types/index.d.ts",
+    "typings": "dist/types/index.d.ts",
+    "exports": {
+      ".": {
+        "import": "./dist/es/index.js",
+        "require": "./dist/umd/index.js"
+      }
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/illacloud/illa-design.git",
+    "directory": "packages/date-picker"
+  },
+  "bugs": {
+    "url": "https://github.com/illacloud/illa-design/issues"
+  },
+  "scripts": {
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@illa-design/system": "workspace:*",
+    "@illa-design/theme": "workspace:*",
+    "@illa-design/trigger": "workspace:*",
+    "@illa-design/config-provider": "workspace:*",
+    "@illa-design/icon": "workspace:*",
+    "@illa-design/button": "workspace:*",
+    "@illa-design/time-picker": "workspace:*",
+    "dayjs": "^1.11.7"
+  },
+  "peerDependencies": {
+    "@emotion/react": "^11.11.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}

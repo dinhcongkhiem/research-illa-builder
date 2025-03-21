@@ -1,0 +1,31 @@
+{
+  "name": "@illa-public/cloud-dashboard-layout",
+  "version": "0.0.0",
+  "private": true,
+  "main": "index.tsx",
+  "dependencies": {
+    "@illa-public/utils": "workspace:*",
+    "@illa-public/avatar": "workspace:*",
+    "@illa-public/user-data": "workspace:*",
+    "@illa-public/public-types": "workspace:*",
+    "@illa-public/user-role-utils": "workspace:*",
+    "@illa-public/invite-modal": "workspace:*",
+    "@illa-public/public-configs": "workspace:*",
+    "@illa-design/react": "workspace:*",
+    "@illa-public/mixpanel-utils": "workspace:*"
+  },
+  "devDependencies": {
+    "tsconfig": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "@types/react": "^18.2.20",
+    "@types/react-dom": "^18.2.7",
+    "@emotion/react": "^11.11.1",
+    "i18next": "^23.7.6",
+    "react-redux": "^9.0.4",
+    "react-i18next": "^13.5.0",
+    "react-router-dom": "^6.4.4"
+  }
+}

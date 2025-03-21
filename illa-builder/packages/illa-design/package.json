@@ -1,0 +1,54 @@
+{
+  "name": "illa-design",
+  "private": true,
+  "description": "illa UI Component",
+  "repository": "git@github.com:illacloud/illa-design.git",
+  "author": "ILLA Cloud <opensource@illasoft.com>",
+  "license": "Apache-2.0",
+  "resolutions": {
+    "graceful-fs": "4.2.9"
+  },
+  "scripts": {
+    "build-all-components": "NODE_OPTIONS=--max-old-space-size=10240 turbo run build",
+    "sb": "turbo run dev --filter=storybook",
+    "bs": "turbo run bs --filter=storybook",
+    "lint": "eslint packages/**/src/ --ext .ts,.tsx --config .eslintrc.js",
+    "format": "prettier --write \"packages/**/*.{ts,tsx}\"",
+    "prepare": "husky install",
+    "plop": "plop new",
+    "plop-icon": "plop new-icon"
+  },
+  "devDependencies": {
+    "@changesets/changelog-github": "^0.4.8",
+    "@changesets/cli": "^2.26.1",
+    "@commitlint/cli": "^15.0.0",
+    "@commitlint/config-conventional": "^15.0.0",
+    "@emotion/react": "^11.10.8",
+    "@rollup/plugin-typescript": "^11.1.2",
+    "@types/react": "^18.2.5",
+    "@types/react-dom": "^18.2.3",
+    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "@typescript-eslint/parser": "^5.62.0",
+    "@vitejs/plugin-react-swc": "^3.3.2",
+    "eslint": "^8.39.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-config-react": "^1.1.7",
+    "eslint-import-resolver-typescript": "^3.5.5",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.2",
+    "plop": "^3.1.2",
+    "prettier": "^2.8.8",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "turbo": "^1.10.15",
+    "typescript": "^5.0.4",
+    "vite": "^4.5.0"
+  },
+  "engines": {
+    "pnpm": "^8"
+  }
+}

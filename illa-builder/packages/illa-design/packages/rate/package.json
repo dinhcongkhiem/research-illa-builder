@@ -1,0 +1,54 @@
+{
+  "name": "@illa-design/rate",
+  "version": "1.1.0",
+  "description": "Illa Design Rate.",
+  "keywords": [
+    "rate",
+    "react",
+    "component"
+  ],
+  "sideEffects": false,
+  "author": "ILLA Cloud <opensource@illasoft.com>",
+  "homepage": "https://github.com/illacloud/illa-design",
+  "license": "Apache-2.0",
+  "main": "src/index.ts",
+  "publishConfig": {
+    "access": "public",
+    "main": "dist/umd/index.js",
+    "module": "dist/es/index.js",
+    "types": "dist/types/index.d.ts",
+    "typings": "dist/types/index.d.ts",
+    "exports": {
+      ".": {
+        "import": "./dist/es/index.js",
+        "require": "./dist/umd/index.js"
+      }
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/illacloud/illa-design.git",
+    "directory": "packages/rate"
+  },
+  "bugs": {
+    "url": "https://github.com/illacloud/illa-design/issues"
+  },
+  "scripts": {
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@illa-design/icon": "workspace:*",
+    "@illa-design/theme": "workspace:*",
+    "@illa-design/system": "workspace:*",
+    "@illa-design/trigger": "workspace:*",
+    "number-precision": "^1.6.0"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "@emotion/react": "^11.11.1"
+  }
+}

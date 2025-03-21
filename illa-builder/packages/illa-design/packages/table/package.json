@@ -1,0 +1,70 @@
+{
+  "name": "@illa-design/table",
+  "version": "1.1.0",
+  "description": "Illa Design Table.",
+  "keywords": [
+    "table",
+    "react",
+    "component"
+  ],
+  "sideEffects": false,
+  "author": "ILLA Cloud <opensource@illasoft.com>",
+  "homepage": "https://github.com/illacloud/illa-design",
+  "license": "Apache-2.0",
+  "main": "src/index.ts",
+  "publishConfig": {
+    "access": "public",
+    "main": "dist/umd/index.js",
+    "module": "dist/es/index.js",
+    "types": "dist/types/index.d.ts",
+    "typings": "dist/types/index.d.ts",
+    "exports": {
+      ".": {
+        "import": "./dist/es/index.js",
+        "require": "./dist/umd/index.js"
+      }
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/illacloud/illa-design.git",
+    "directory": "packages/table"
+  },
+  "bugs": {
+    "url": "https://github.com/illacloud/illa-design/issues"
+  },
+  "scripts": {
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@illa-design/button": "workspace:*",
+    "@illa-design/checkbox": "workspace:*",
+    "@illa-design/empty": "workspace:*",
+    "@illa-design/icon": "workspace:*",
+    "@illa-design/input": "workspace:*",
+    "@illa-design/pagination": "workspace:*",
+    "@illa-design/select": "workspace:*",
+    "@illa-design/spin": "workspace:*",
+    "@illa-design/system": "workspace:*",
+    "@illa-design/theme": "workspace:*",
+    "@illa-design/trigger": "workspace:*",
+    "@tanstack/match-sorter-utils": "^8.8.4",
+    "@tanstack/react-table": "^8.9.1",
+    "chroma-js": "^2.1.2",
+    "lodash.debounce": "^4.0.8",
+    "react-fast-compare": "^3.2.0",
+    "react-use": "^17.4.0"
+  },
+  "devDependencies": {
+    "@types/chroma-js": "^2.1.4",
+    "@types/lodash.debounce": "^4.0.7"
+  },
+  "peerDependencies": {
+    "@emotion/react": "^11.11.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}

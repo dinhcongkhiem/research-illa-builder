@@ -1,0 +1,54 @@
+{
+  "name": "illa",
+  "description": "Help developers build business tools more efficiently.",
+  "repository": "git@github.com:illacloud",
+  "private": true,
+  "author": "illa Cloud",
+  "license": "Apache-2.0",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "turbo run dev --filter=illa-builder ",
+    "dev:self": "turbo run dev --filter=illa-builder --filter=illa-cloud-fe",
+    "build-cloud": "NODE_OPTIONS=--max-old-space-size=12288 turbo run build-cloud --filter=illa-builder",
+    "build-self": "NODE_OPTIONS=--max-old-space-size=12288 turbo run build-self --filter=illa-builder --filter=illa-cloud-fe",
+    "prepare": "husky install",
+    "format": "prettier --write \"apps/**/*.{ts,tsx}\"",
+    "lint": "eslint \"apps/**/src/**/**.{ts,tsx}\" --config \".eslintrc.js\"",
+    "lint:fix": "eslint --fix \"apps/**/src/**/**.{ts,tsx}\" --config \".eslintrc.js\"",
+    "test": "turbo run test",
+    "ts-check": "turbo run ts-check"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^18.4.3",
+    "@commitlint/config-conventional": "^18.4.3",
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
+    "@types/node": "^18.18.13",
+    "@types/react": "^18.2.38",
+    "@types/react-dom": "^18.2.17",
+    "@vitejs/plugin-basic-ssl": "^1.0.1",
+    "@vitejs/plugin-react-swc": "^3.5.0",
+    "eslint": "^8.54.0",
+    "eslint-config-illa": "workspace:*",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.1.0",
+    "prettier": "^3.1.0",
+    "turbo": "^1.10.16",
+    "typescript": "^5.3.2",
+    "vite": "^4.5.0",
+    "vite-plugin-checker": "^0.6.2",
+    "vite-plugin-svgr": "^4.2.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "react": "$react",
+      "react-dom": "$react-dom",
+      "@types/react": "$@types/react",
+      "@types/react-dom": "$@types/react-dom"
+    }
+  }
+}

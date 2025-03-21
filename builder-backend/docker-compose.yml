@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:14
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/postgres-init.sh:/docker-entrypoint-initdb.d/postgres-init.sh
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:6
+    command: redis-server --requirepass illa2022
+    ports:
+      - "6379:6379"
+
+  illa-builder-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      - ILLA_PG_ADDR=postgres
+      - ILLA_REDIS_ADDR=redis
+      - ILLA_SERVER_HOST=0.0.0.0
+      - ILLA_WEBSOCKET_SERVER_HOST=0.0.0.0
+      - ILLA_DEPLOY_MODE=self-host
+    ports:
+      - "8001:8001"  # Main API
+      - "8002:8002"  # WebSocket
+      - "9001:9001"  # Internal API
+
+volumes:
+  postgres_data:

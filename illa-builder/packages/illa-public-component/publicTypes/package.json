@@ -1,0 +1,9 @@
+{
+  "name": "@illa-public/public-types",
+  "version": "0.0.0",
+  "private": true,
+  "main": "index.ts",
+  "devDependencies": {
+    "tsconfig": "workspace:*"
+  }
+}

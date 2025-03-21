@@ -1,0 +1,22 @@
+{
+  "name": "@illa-public/user-data",
+  "version": "0.0.0",
+  "private": true,
+  "main": "index.ts",
+  "dependencies": {
+    "@illa-public/illa-net": "workspace:*",
+    "@illa-public/utils": "workspace:*",
+    "@illa-public/public-types": "workspace:*"
+  },
+  "devDependencies": {
+    "tsconfig": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "@types/react": "^18.2.20",
+    "@types/react-dom": "^18.2.7",
+    "@reduxjs/toolkit": "^2.0.1",
+    "react-redux": "^9.0.4"
+  }
+}

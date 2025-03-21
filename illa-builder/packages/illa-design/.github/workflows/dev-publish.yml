@@ -1,0 +1,96 @@
+name: "Preview Publish"
+
+on:
+  push:
+    branches: [main, beta]
+
+env:
+  TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+
+jobs:
+  install:
+    runs-on: macos-latest
+
+    strategy:
+      matrix:
+        node-version: [18]
+        pnpm-version: [8]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: ${{ matrix.pnpm-version }}
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "pnpm"
+
+      - name: Cache node modules & Turbo building
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: |
+            **/node_modules
+            ~/Library/Caches/Cypress
+          key: ${{ runner.os }}-build-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ hashFiles('**/pnpm-lock.yaml') }}
+
+      - name: Build
+        run: |
+          pnpm install --frozen-lockfile
+
+  build:
+    needs:
+      - install
+
+    runs-on: macos-latest
+
+    strategy:
+      matrix:
+        node-version: [18]
+        pnpm-version: [8]
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: ${{ matrix.pnpm-version }}
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "pnpm"
+
+      - name: Cache node modules & Turbo building
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: |
+            **/node_modules
+            ~/Library/Caches/Cypress
+          key: ${{ runner.os }}-build-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ hashFiles('**/pnpm-lock.yaml') }}
+
+      - name: Build storybook
+        run: |
+          pnpm bs
+          echo "design.illafamily.com" > "./apps/storybook/storybook-static/CNAME"
+
+      - name: Deploy storybook to Github Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./apps/storybook/storybook-static
