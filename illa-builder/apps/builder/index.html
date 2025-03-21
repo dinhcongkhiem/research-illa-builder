@@ -53,6 +53,9 @@
 
       async function validateCustomDomain() {
         const origin = location.origin
+        console.log("origin", origin)
+        console.log("ILLA_INSTANCE_ID", "%ILLA_INSTANCE_ID%")
+        console.log("ILLA_BUILDER_URL", "%ILLA_BUILDER_URL%")
         if (
           "%ILLA_INSTANCE_ID%" === "CLOUD" &&
           origin !== "%ILLA_BUILDER_URL%"

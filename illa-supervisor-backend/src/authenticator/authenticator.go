@@ -171,19 +171,34 @@ func (a *Authenticator) JWTAuth() gin.HandlerFunc {
 }
 
 func (a *Authenticator) ManualAuth(accessToken string) (bool, error) {
+	log.Printf("[INFO] ManualAuth - Starting manual authentication with token: %s", accessToken)
+
 	// fetch user
 	userID, userUID, extractErr := ExtractUserIDFromToken(accessToken)
+	log.Printf("[INFO] ManualAuth - Extracted userID: %d, userUID: %s, error: %v", userID, userUID, extractErr)
+
 	user, err := a.Storage.UserStorage.RetrieveByIDAndUID(userID, userUID)
 	if err != nil {
+		log.Printf("[ERROR] ManualAuth - Failed to retrieve user: %v", err)
 		return false, errors.New("auth failed.")
 	}
+	log.Printf("[INFO] ManualAuth - Successfully retrieved user: %+v", user)
+
 	validAccessToken, validaAccessErr := a.ValidateAccessToken(accessToken)
+	log.Printf("[INFO] ManualAuth - Token validation result: valid=%v, error=%v", validAccessToken, validaAccessErr)
+
 	validUser, validUserErr := a.ValidateUser(user, userID, userUID)
+	log.Printf("[INFO] ManualAuth - User validation result: valid=%v, error=%v", validUser, validUserErr)
+
 	expireAtAvaliable, errInValidatteExpireAt := a.DoesAccessTokenExpiredAtAvaliable(user, accessToken)
+	log.Printf("[INFO] ManualAuth - Token expiration validation: valid=%v, error=%v", expireAtAvaliable, errInValidatteExpireAt)
 
 	if validAccessToken && validUser && expireAtAvaliable && validaAccessErr == nil && extractErr == nil && validUserErr == nil && errInValidatteExpireAt == nil {
+		log.Printf("[INFO] ManualAuth - Authentication successful for userID: %d", userID)
 		return true, nil
 	} else {
+		log.Printf("[ERROR] ManualAuth - Authentication failed. validAccessToken=%v, validUser=%v, expireAtAvaliable=%v, validaAccessErr=%v, extractErr=%v, validUserErr=%v, errInValidatteExpireAt=%v",
+			validAccessToken, validUser, expireAtAvaliable, validaAccessErr, extractErr, validUserErr, errInValidatteExpireAt)
 		return false, errors.New("auth failed.")
 	}
 }

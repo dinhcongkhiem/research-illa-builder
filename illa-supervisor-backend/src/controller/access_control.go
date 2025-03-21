@@ -1,6 +1,9 @@
 package controller
 
 import (
+	"log"
+
+
 	"github.com/gin-gonic/gin"
 
 	"github.com/illacloud/illa-supervisor-backend/src/accesscontrol"
@@ -9,25 +12,32 @@ import (
 )
 
 func (controller *Controller) ValidateAccount(c *gin.Context) {
+	log.Printf("[ValidateAccount] Start validating account")
 	authorizationToken, errInGetAuthorizationToken := controller.GetStringParamFromHeader(c, PARAM_AUTHORIZATION_TOKEN)
 	if errInGetAuthorizationToken != nil {
+		log.Printf("[ValidateAccount] Failed to get authorization token: %v", errInGetAuthorizationToken)
 		return
 	}
 
 	// validate request data
+	log.Printf("[ValidateAccount] Validating request token")
 	validated, errInValidate := controller.ValidateRequestTokenFromHeader(c, authorizationToken)
 	if !validated && errInValidate != nil {
+		log.Printf("[ValidateAccount] Failed to validate request token: %v", errInValidate)
 		return
 	}
 
 	// validate account
+	log.Printf("[ValidateAccount] Validating account with token")
 	a := controller.Authenticator
 	if _, err := a.ManualAuth(authorizationToken); err != nil {
+		log.Printf("[ValidateAccount] Failed to validate account: %v", err)
 		controller.FeedbackBadRequest(c, ERROR_FLAG_VALIDATE_ACCOUNT_FAILED, "validate account failed: "+err.Error())
 		return
 	}
 
 	// feedback
+	log.Printf("[ValidateAccount] Account validation successful")
 	controller.FeedbackOK(c, nil)
 	return
 }

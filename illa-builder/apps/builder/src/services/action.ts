@@ -38,6 +38,8 @@ export const fetchActionRunResult = (
     options.teamIdentifier = getCurrentTeamIdentifier()
   } else {
     url = `/apps/${appID}/actions/${actionID}/run`
+    console.log("url", url)
+
     options.teamID = getCurrentTeamID()
   }
   return actionRequest<IActionRunResultResponseData>(

@@ -26,7 +26,6 @@ services:
       - ILLA_SERVER_INTERNAL_PORT=9002
       - ILLA_SERVER_MODE=release
       - ILLA_DEPLOY_MODE=self-host
-      - ILLA_SECRET_KEY=your_secret_key_here
       - ILLA_SUPERVISOR_PG_ADDR=postgres
       - ILLA_SUPERVISOR_PG_PORT=5432
       - ILLA_SUPERVISOR_PG_USER=illa_supervisor
@@ -63,7 +62,7 @@ services:
       - ILLA_SERVER_HOST=0.0.0.0
       - ILLA_WEBSOCKET_SERVER_HOST=0.0.0.0
       - ILLA_DEPLOY_MODE=self-host
-      - ILLA_SUPERVISOR_INTERNAL_API=http://supervisor-backend:9001/api/v1
+      - ILLA_SUPERVISOR_INTERNAL_API=http://supervisor-backend:9002/api/v1  
     depends_on:
       - postgres
       - redis
