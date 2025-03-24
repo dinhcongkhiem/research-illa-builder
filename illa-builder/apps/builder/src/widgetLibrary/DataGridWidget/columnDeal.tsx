@@ -1,8 +1,11 @@
 import { convertPathToString } from "@illa-public/dynamic-string"
-import {
+import type {
   GridRenderCellParams,
   GridValueGetterParams,
-} from "@mui/x-data-grid-premium"
+  GridRowId,
+  GridTreeNodeWithRender,
+  GridApi,
+} from "@mui/x-data-grid"
 import dayjs from "dayjs"
 import {
   get,
@@ -61,7 +64,7 @@ export function getColumnFromType(
   ) => void,
 ): ColumnConfig {
   const commonValueGetter = (params: GridValueGetterParams) => {
-    const index = params.api.getAllRowIds().findIndex((id) => id === params.id)
+    const index = params.api.getAllRowIds().findIndex((id: GridRowId) => id === params.id)
     if (index !== -1) {
       const mappedValue = get(params.colDef, "mappedValue")
       if (mappedValue === undefined) {
@@ -80,7 +83,7 @@ export function getColumnFromType(
   }
 
   const commonDateValueGetter = (params: GridValueGetterParams) => {
-    const index = params.api.getAllRowIds().findIndex((id) => id === params.id)
+    const index = params.api.getAllRowIds().findIndex((id: GridRowId) => id === params.id)
     let v = params.value
     if (index !== -1) {
       const mappedValue = get(params.colDef, "mappedValue")
@@ -102,7 +105,8 @@ export function getColumnFromType(
       return {
         ...column,
         type: "string",
-        renderCell: (params: GridRenderCellParams) => {
+        renderCell: (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
+          const api = params.api as GridApi
           const disabled = isBoolean(get(params.colDef, "disabled"))
             ? get(params.colDef, "disabled")
             : false
@@ -119,7 +123,7 @@ export function getColumnFromType(
                 setTimeout(() => {
                   triggerEventHandler(
                     "click",
-                    `columns[${params.api.getColumnIndex(
+                    `columns[${api.getColumnIndex(
                       params.field,
                       false,
                     )}].events`,
@@ -127,7 +131,7 @@ export function getColumnFromType(
                     (path) => {
                       return formatDataGridColumnEvent(
                         path,
-                        `columns[${params.api.getColumnIndex(
+                        `columns[${api.getColumnIndex(
                           params.field,
                           false,
                         )}].`,
@@ -147,7 +151,8 @@ export function getColumnFromType(
       return {
         ...column,
         type: "string",
-        renderCell: (params: GridRenderCellParams) => {
+        renderCell: (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
+          const api = params.api as GridApi
           const buttonGroup: GroupButton[] =
             get(params.colDef, "buttonGroup") ?? []
           return (
@@ -156,7 +161,7 @@ export function getColumnFromType(
                 let label = button.mappedValue
                 const index = params.api
                   .getAllRowIds()
-                  .findIndex((id) => id === params.id)
+                  .findIndex((id: GridRowId) => id === params.id)
                 if (isArray(label) && index !== -1) {
                   label = isObject(label[index])
                     ? JSON.stringify(label[index])
@@ -177,7 +182,7 @@ export function getColumnFromType(
                       setTimeout(() => {
                         triggerEventHandler(
                           "click",
-                          `columns[${params.api.getColumnIndex(
+                          `columns[${api.getColumnIndex(
                             params.field,
                             false,
                           )}].buttonGroup[${buttonIndex}].events`,
@@ -185,7 +190,7 @@ export function getColumnFromType(
                           (path) => {
                             return formatDataGridColumnEvent(
                               path,
-                              `columns[${params.api.getColumnIndex(
+                              `columns[${api.getColumnIndex(
                                 params.field,
                                 false,
                               )}].buttonGroup[${buttonIndex}].`,
@@ -208,7 +213,7 @@ export function getColumnFromType(
       return {
         ...column,
         type: "number",
-        renderCell: (params: GridRenderCellParams) => {
+        renderCell: (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
           const maxCount = isNumber(get(params.colDef, "maxCount"))
             ? get(params.colDef, "maxCount")
             : 5
@@ -221,7 +226,7 @@ export function getColumnFromType(
       return {
         ...column,
         type: "number",
-        renderCell: (params: GridRenderCellParams) => {
+        renderCell: (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
           const decimalPlaces = get(params.colDef, "decimalPlaces")
           const locale = isValidLocale(get(params.colDef, "locale") ?? "en-US")
             ? get(params.colDef, "locale")
@@ -251,7 +256,7 @@ export function getColumnFromType(
       return {
         ...column,
         type: "string",
-        renderCell: (params: GridRenderCellParams) => {
+        renderCell: (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
           return (
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}
@@ -285,12 +290,12 @@ export function getColumnFromType(
       return {
         ...column,
         type: "number",
-        renderCell: (params: GridRenderCellParams) => {
+        renderCell: (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
           const decimalPlaces = get(params.colDef, "decimalPlaces")
           const locale = isValidLocale(get(params.colDef, "locale") ?? "en-US")
             ? get(params.colDef, "locale")
             : "en-US"
-          const currencyCode = get(params.colDef, "currencyCode") ?? "USD"
+          const currencyCode = (get(params.colDef, "currencyCode") ?? "USD") as keyof typeof CurrencyCode
           const showThousandsSeparator = get(
             params.colDef,
             "showThousandsSeparator",
@@ -303,15 +308,15 @@ export function getColumnFromType(
                 ).toLocaleString(locale, {
                   minimumFractionDigits: decimalPlaces,
                 })}`
-              : `${CurrencyCode[currencyCode ?? "USD"]}${Number(
+              : `${CurrencyCode[currencyCode]}${Number(
                   params.value,
                 ).toFixed(decimalPlaces)}`
           } else {
             finalResult = showThousandsSeparator
-              ? `${CurrencyCode[currencyCode ?? "USD"]}${Number(
+              ? `${CurrencyCode[currencyCode]}${Number(
                   params.value,
                 ).toLocaleString(locale)}`
-              : `${CurrencyCode[currencyCode ?? "USD"]}${params.value}`
+              : `${CurrencyCode[currencyCode]}${params.value}`
           }
           return <span css={currencyContainerStyle}>{finalResult}</span>
         },
@@ -321,7 +326,7 @@ export function getColumnFromType(
       return {
         ...column,
         type: "string",
-        renderCell: (params: GridRenderCellParams) => {
+        renderCell: (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
           const tagColor = get(params.colDef, "tagColor")
 
           let tagLabelArray: any[] = params.value
@@ -359,7 +364,7 @@ export function getColumnFromType(
       return {
         ...column,
         type: "string",
-        renderCell: (params: GridRenderCellParams) => {
+        renderCell: (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
           const objectFit = get(params.colDef, "objectFit")
           return <Image src={params.value} objectFit={objectFit} />
         },
@@ -371,10 +376,10 @@ export function getColumnFromType(
       return {
         ...column,
         type: "string",
-        renderCell: (params: GridRenderCellParams) => {
+        renderCell: (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
           const index = params.api
             .getAllRowIds()
-            .findIndex((id) => id === params.id)
+            .findIndex((id: GridRowId) => id === params.id)
 
           return (
             <WrapperAvatar
@@ -409,7 +414,7 @@ export function getColumnFromType(
       return {
         ...column,
         type: "number",
-        renderCell: (params: GridRenderCellParams) => {
+        renderCell: (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
           const decimalPlaces = get(params.colDef, "decimalPlaces")
           const locale = isValidLocale(get(params.colDef, "locale") ?? "en-US")
             ? get(params.colDef, "locale")
@@ -442,7 +447,7 @@ export function getColumnFromType(
       return {
         ...column,
         type: "date",
-        renderCell: (params: GridRenderCellParams) => {
+        renderCell: (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
           return (
             <SingleDatePicker
               readonly
@@ -461,7 +466,7 @@ export function getColumnFromType(
       return {
         ...column,
         type: "datetime",
-        renderCell: (params: GridRenderCellParams) => {
+        renderCell: (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
           return (
             <SingleDatePicker
               readonly
@@ -480,7 +485,7 @@ export function getColumnFromType(
       return {
         ...column,
         type: "string",
-        renderCell: (params: GridRenderCellParams) => {
+        renderCell: (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
           return (
             <Link href={params.value} target="_blank">
               {params.value}

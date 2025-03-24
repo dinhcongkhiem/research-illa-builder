@@ -8,7 +8,7 @@ import {
   GridToolbarExport,
   GridToolbarFilterButton,
   GridToolbarQuickFilter,
-} from "@mui/x-data-grid-premium"
+} from "@mui/x-data-grid"
 import { FC } from "react"
 import { useTranslation } from "react-i18next"
 import { ExportAllSetting } from "../ExportAllSetting"

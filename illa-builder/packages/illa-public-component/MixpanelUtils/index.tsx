@@ -40,8 +40,8 @@ class ILLAMixpanelTools {
       amplitude.init(process.env.ILLA_AMPLITUDE_API_KEY as string, undefined, {
         logLevel:
           process.env.ILLA_APP_ENV === "development"
-            ? amplitude.Types.LogLevel.Debug
-            : amplitude.Types.LogLevel.None,
+            ? 4
+            : 0
       })
     }
   }

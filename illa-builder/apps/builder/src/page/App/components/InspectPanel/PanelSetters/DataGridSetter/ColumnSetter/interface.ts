@@ -3,7 +3,7 @@ import {
   GridColType,
   GridRenderCellParams,
   GridValueGetterParams,
-} from "@mui/x-data-grid-premium"
+} from "@mui/x-data-grid"
 import { ReactNode } from "react"
 import { BaseSetter } from "@/page/App/components/InspectPanel/PanelSetters/interface"
 

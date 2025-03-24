@@ -1,9 +1,8 @@
 import {
-  GridAggregationModel,
   GridColumnVisibilityModel,
   GridFilterModel,
   GridInputRowSelectionModel,
-} from "@mui/x-data-grid-premium"
+} from "@mui/x-data-grid"
 import i18n from "i18next"
 import { ColumnConfig } from "@/page/App/components/InspectPanel/PanelSetters/DataGridSetter/ColumnSetter/interface"
 import { BaseWidgetProps } from "@/widgetLibrary/interface"
@@ -37,7 +36,6 @@ export interface BaseDataGridProps extends BaseWidgetProps {
   selectedRowsPrimaryKeys?: GridInputRowSelectionModel
   columns?: ColumnConfig[]
   enablePagination?: boolean
-  aggregationModel?: GridAggregationModel
 }
 
 export const ColumnTypeList = [

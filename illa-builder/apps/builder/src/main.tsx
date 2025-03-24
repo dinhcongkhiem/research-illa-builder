@@ -1,6 +1,6 @@
 import { ILLAMixpanel } from "@illa-public/mixpanel-utils"
 import { initDateReport, initDayjs } from "@illa-public/utils"
-import { LicenseInfo } from "@mui/x-data-grid-premium"
+// import { LicenseInfo } from "@mui/x-data-grid-premium"
 import * as Sentry from "@sentry/react"
 import { StrictMode } from "react"
 import { createRoot } from "react-dom/client"
@@ -34,9 +34,9 @@ if (
   })
 }
 
-if (import.meta.env.ILLA_MUI_LICENSE) {
-  LicenseInfo.setLicenseKey(import.meta.env.ILLA_MUI_LICENSE)
-}
+// if (import.meta.env.ILLA_MUI_LICENSE) {
+//   LicenseInfo.setLicenseKey(import.meta.env.ILLA_MUI_LICENSE)
+// }
 
 initDateReport()
 ILLAMixpanel.setDeviceID()

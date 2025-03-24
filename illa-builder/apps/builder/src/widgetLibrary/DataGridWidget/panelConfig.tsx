@@ -795,32 +795,7 @@ export const DATA_GRID_PANEL_CONFIG: PanelConfig[] = [
         expectedType: VALIDATION_TYPES.BOOLEAN,
         openDynamic: true,
         useCustomLayout: true,
-      },
-      {
-        id: `${baseWidgetName}-basic-rowSelectionMode`,
-        labelName: i18n.t("editor.inspect.setter_label.selection_mode"),
-        labelDesc: i18n.t("editor.inspect.setter_tips.selection_mode"),
-        attrName: "rowSelectionMode",
-        setterType: "DYNAMIC_SELECT_SETTER",
-        defaultValue: "single",
-        isSetterSingleRow: true,
-        useCustomLayout: true,
-        openDynamic: true,
-        bindAttrName: ["rowSelection"],
-        shown: (value) => value,
-        options: [
-          {
-            label: i18n.t("editor.inspect.setter_options.single_row_selection"),
-            value: "single",
-          },
-          {
-            label: i18n.t(
-              "editor.inspect.setter_options.multiple_row_selection",
-            ),
-            value: "multiple",
-          },
-        ],
-      },
+      }
     ],
   },
   {

@@ -1,17 +1,17 @@
 import { StyledEngineProvider, ThemeProvider, createTheme } from "@mui/material"
 import {
-  DataGridPremium,
-  GridAggregationModel,
-  GridColDef,
-  GridColumnVisibilityModel,
-  GridEventListener,
-  GridFilterModel,
-  GridPaginationModel,
-  GridRowIdGetter,
-  GridRowSelectionModel,
-  GridSortModel,
-} from "@mui/x-data-grid-premium"
-import { GridApiPremium } from "@mui/x-data-grid-premium/models/gridApiPremium"
+  DataGrid,
+  type GridColDef,
+  type GridColumnVisibilityModel,
+  type GridEventListener,
+  type GridFilterModel,
+  type GridPaginationModel,
+  type GridRowIdGetter,
+  type GridRowParams,
+  type GridRowSelectionModel,
+  type GridSortModel,
+} from "@mui/x-data-grid"
+import type { GridApi } from "@mui/x-data-grid"
 import { get, isArray, isNumber, isPlainObject } from "lodash-es"
 import {
   FC,
@@ -84,37 +84,9 @@ export const DataGridWidget: FC<BaseDataGridProps> = (props) => {
     [rawData, enableServerSidePagination, serverSideOffset],
   )
 
-  const ref = useRef<GridApiPremium>(null) as MutableRefObject<GridApiPremium>
+  const ref = useRef<GridApi>(null) as MutableRefObject<GridApi>
 
   const dispatch = useDispatch()
-
-  const handleAggregationModelChange = (modal: GridAggregationModel) => {
-    if (!columns || !Array.isArray(columns)) return
-    let curColumns = [...(columns || [])]
-    Object.keys(modal).forEach((key) => {
-      const index = columns.findIndex((column) => {
-        return column?.field === key
-      })
-      if (!columns || index === -1) return
-      curColumns = [
-        ...curColumns.slice(0, index),
-        {
-          ...columns[index],
-          aggregationModel: modal[key],
-        },
-        ...curColumns.slice(index + 1),
-      ]
-    })
-
-    handleUpdateMultiExecutionResult([
-      {
-        displayName,
-        value: {
-          columns: curColumns,
-        },
-      },
-    ])
-  }
 
   const isInnerDragging = useRef(false)
 
@@ -213,9 +185,7 @@ export const DataGridWidget: FC<BaseDataGridProps> = (props) => {
               displayName,
               value: {
                 selectedRowsPrimaryKeys: rows,
-                selectedRows: rows.map((id) =>
-                  ref.current.getRowModels().get(id),
-                ),
+                selectedRows: rows.map((id) => ref.current.getRow(id)),
               },
             },
           ])
@@ -252,16 +222,6 @@ export const DataGridWidget: FC<BaseDataGridProps> = (props) => {
     })
   }, [arrayData, columns, triggerEventHandler])
 
-  const aggregationModel = useMemo(() => {
-    const curAggregationModel: GridAggregationModel = {}
-    columns?.forEach((column) => {
-      if (column?.aggregationModel) {
-        curAggregationModel[column.field] = column.aggregationModel
-      }
-    })
-    return curAggregationModel
-  }, [columns])
-
   const innerFilterModel =
     filterModel !== undefined
       ? {
@@ -285,50 +245,35 @@ export const DataGridWidget: FC<BaseDataGridProps> = (props) => {
     rowSelection &&
     (rowSelectionMode === "multiple" || rowSelectionMode === "single")
 
-  /**
-   *
-   * Data Grid Pagination Attributes Start
-   *
-   */
-
   const paginationModel =
     pageSize !== undefined
       ? {
-          pageSize: pageSize ?? 0,
+          pageSize: pageSize ?? 10,
           page: page ?? 0,
         }
-      : undefined
+      : {
+          pageSize: 100,
+          page: 0,
+        }
   const paginationMode = enablePagination
     ? enableServerSidePagination
       ? "server"
       : "client"
     : undefined
 
-  /**
-   *
-   * Data Grid Pagination Attributes End
-   *
-   */
-
-  const getRowID: GridRowIdGetter<any> = (row) => {
+  const getRowID: GridRowIdGetter = (row: Record<string, unknown>) => {
     if (
       primaryKey === undefined ||
       primaryKey === "—" ||
       !(primaryKey in row)
     ) {
-      return get(row, UNIQUE_ID_NAME)
+      return get(row, UNIQUE_ID_NAME) as string | number
     } else {
-      return get(row, primaryKey)
+      return get(row, primaryKey) as string | number
     }
   }
 
-  /**
-   *
-   * DATA GRID Event Listeners Start
-   *
-   */
-
-  const onRowClick: GridEventListener<"rowClick"> = (params) => {
+  const onRowClick: GridEventListener<"rowClick"> = (params: GridRowParams) => {
     handleUpdateMultiExecutionResult([
       {
         displayName,
@@ -370,7 +315,9 @@ export const DataGridWidget: FC<BaseDataGridProps> = (props) => {
         displayName,
         value: {
           selectedRowsPrimaryKeys: model,
-          selectedRows: model.map((id) => ref.current.getRowModels().get(id)),
+          selectedRows: model.map((id: string | number) =>
+            ref.current.getRow(id),
+          ),
         },
       },
     ])
@@ -429,12 +376,6 @@ export const DataGridWidget: FC<BaseDataGridProps> = (props) => {
     isInnerDragging.current = false
   }
 
-  /**
-   *
-   * DATA GRID Event Listeners End
-   *
-   */
-
   return (
     <StyledEngineProvider injectFirst>
       <ThemeProvider
@@ -444,12 +385,10 @@ export const DataGridWidget: FC<BaseDataGridProps> = (props) => {
           },
         })}
       >
-        <DataGridPremium
+        <DataGrid
           localeText={getDataGridLocalization()}
           key={displayName + ":" + primaryKey}
-          apiRef={ref}
           getRowId={getRowID}
-          aggregationModel={aggregationModel}
           filterModel={innerFilterModel}
           rowSelectionModel={
             innerRowSelection ? selectedRowsPrimaryKeys : undefined
@@ -460,12 +399,9 @@ export const DataGridWidget: FC<BaseDataGridProps> = (props) => {
             ...columnVisibilityModel,
           }}
           sortModel={sortModel}
-          pagination={enablePagination}
+          // pagination={undefined}
           pageSizeOptions={isArray(pageSizeOptions) ? pageSizeOptions : []}
           autoPageSize={pageSize === undefined}
-          disableMultipleRowSelection={
-            rowSelectionMode === "single" || !innerRowSelection
-          }
           checkboxSelection={
             innerRowSelection && rowSelectionMode === "multiple"
           }
@@ -483,8 +419,6 @@ export const DataGridWidget: FC<BaseDataGridProps> = (props) => {
           }}
           paginationModel={paginationModel}
           paginationMode={paginationMode}
-          // Event listeners
-          onAggregationModelChange={handleAggregationModelChange}
           onFilterModelChange={onFilterModelChange}
           onColumnVisibilityModelChange={onColumnVisibilityModelChange}
           onRowSelectionModelChange={onRowSelectionModelChange}

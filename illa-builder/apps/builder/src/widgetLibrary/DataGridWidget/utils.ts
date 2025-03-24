@@ -18,7 +18,7 @@ import {
   svSE,
   ukUA,
   zhCN,
-} from "@mui/x-data-grid-premium"
+} from "@mui/x-data-grid"
 
 export function getDataGridLocalization() {
   const currentLng = window.localStorage.getItem("i18nextLng") ?? "en-US"

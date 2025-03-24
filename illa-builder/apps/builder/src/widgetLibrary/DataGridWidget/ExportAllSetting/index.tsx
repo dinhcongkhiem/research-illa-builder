@@ -1,9 +1,13 @@
 import SaveAltIcon from "@mui/icons-material/SaveAlt"
 import { Button, Menu, MenuItem } from "@mui/material"
+import type {
+  GridCsvGetRowsToExportParams,
+} from "@mui/x-data-grid"
 import {
   gridSortedRowIdsSelector,
   useGridApiContext,
-} from "@mui/x-data-grid-premium"
+} from "@mui/x-data-grid"
+import { GridApiCommunity } from "@mui/x-data-grid/models/api/gridApiCommunity"
 import { FC, useState } from "react"
 import { useTranslation } from "react-i18next"
 
@@ -46,22 +50,12 @@ export const ExportAllSetting: FC = () => {
         <MenuItem
           onClick={() => {
             apiRef.current.exportDataAsCsv({
-              getRowsToExport: (params) =>
+              getRowsToExport: (params: GridCsvGetRowsToExportParams<GridApiCommunity>) =>
                 gridSortedRowIdsSelector(params.apiRef),
             })
           }}
         >
           {t("widget.table.export.csv")}
-        </MenuItem>
-        <MenuItem
-          onClick={() => {
-            apiRef.current.exportDataAsExcel({
-              getRowsToExport: (params) =>
-                gridSortedRowIdsSelector(params.apiRef),
-            })
-          }}
-        >
-          {t("widget.table.export.excel")}
         </MenuItem>
       </Menu>
     </>
