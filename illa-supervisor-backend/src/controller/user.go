@@ -466,3 +466,22 @@ func (controller *Controller) DeleteUser(c *gin.Context) {
 	controller.FeedbackOK(c, nil)
 	return
 }
+
+func (controller *Controller) GetUserByEmail(c *gin.Context) {
+    email := c.Query("email")
+    if email == "" {
+        controller.FeedbackBadRequest(c, ERROR_FLAG_CAN_NOT_GET_USER, "email parameter is required")
+        return
+    }
+    log.Printf("[DEBUG] GetUserByEmail - Looking up user with email: %s", email)
+    user, err := controller.Storage.UserStorage.RetrieveByEmail(email)
+    if err != nil {
+        log.Printf("[ERROR] GetUserByEmail - Failed to retrieve user: %v", err)
+        controller.FeedbackBadRequest(c, ERROR_FLAG_CAN_NOT_GET_USER, "get user by email error: "+err.Error())
+        return
+    }
+    
+	response := model.NewUserEmailResponse(user)
+    log.Printf("[INFO] GetUserByEmail - Successfully retrieved user: ID=%d, UUID=%s", user.ID, user.UID)
+    controller.FeedbackOK(c, response)
+}

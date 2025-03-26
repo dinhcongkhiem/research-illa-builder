@@ -225,3 +225,19 @@ func (u *UserSSOConfig) Export() string {
 	r, _ := json.Marshal(u)
 	return string(r)
 }
+
+
+type UserEmailResponse struct {
+    UserID   int       `json:"userID"`
+    UserUUID uuid.UUID `json:"userUUID"`
+}
+
+func NewUserEmailResponse(user *User) *UserEmailResponse {
+    return &UserEmailResponse{
+        UserID:   user.ID,
+        UserUUID: user.UID,
+    }
+}
+func (r *UserEmailResponse) ExportForFeedback() interface{} {
+    return r
+}

@@ -41,6 +41,10 @@ services:
       - ILLA_DRIVE_ENDPOINT=minio:9000
       - ILLA_DRIVE_SYSTEM_BUCKET_NAME=illa-supervisor
       - ILLA_DRIVE_TEAM_BUCKET_NAME=illa-supervisor-team
+      - ILLA_KEYCLOAK_ISSUER_URL=http://192.168.1.10:9080/realms/saas2411205496309578e0948fa57f
+      - ILLA_KEYCLOAK_CLIENT_ID=cmn
+      - ILLA_KEYCLOAK_CLIENT_SECRET=bBaQPWr3u51k8sQ1MLqA1dbhjk485XK2
+      - ILLA_KEYCLOAK_REALM=saas2411205496309578e0948fa57f
     depends_on:
       - postgres
       - redis
@@ -78,7 +82,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./builder-backend/scripts/postgres-init.sh:/docker-entrypoint-initdb.d/postgres-init.sh
     ports:
-      - "5432:5432"
+      - "5433:5432"
     command: >
       postgres
       -c 'max_connections=1000'
@@ -125,6 +129,17 @@ services:
     networks:
       - illa-network
 
+  illa-builder:
+      build:
+        context: ./illa-builder
+        dockerfile: Dockerfile
+      ports:
+        - "3000:3000"
+        - "5173:5173"
+        - "4173:4173"
+        - "4174:4174"
+      networks:
+      - illa-network
 networks:
   illa-network:
     driver: bridge

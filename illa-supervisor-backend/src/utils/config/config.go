@@ -39,6 +39,11 @@ type Config struct {
 	SecretKey          string `env:"ILLA_SECRET_KEY"               envDefault:"8xEMrWkBARcDDYQ"`
 	ServeHTTPS         string `env:"ILLA_DEPLOY_SERVE_HTTPS"       envDefault:"false"`
 
+	IssuerURL string `env:"ILLA_KEYCLOAK_ISSUER_URL" envDefault:""`
+	ClientID  string `env:"ILLA_KEYCLOAK_CLIENT_ID"  envDefault:""`
+	ClientSecret string `env:"ILLA_KEYCLOAK_CLIENT_SECRET" envDefault:""`
+	Realm    string `env:"ILLA_KEYCLOAK_REALM"     envDefault:""`
+
 	// storage config
 	PostgresAddr     string `env:"ILLA_SUPERVISOR_PG_ADDR" envDefault:"localhost"`
 	PostgresPort     string `env:"ILLA_SUPERVISOR_PG_PORT" envDefault:"5432"`
@@ -215,4 +220,17 @@ func (c *Config) GetMINIOTeamBucketName() string {
 
 func (c *Config) GetMINIOTimeout() time.Duration {
 	return c.DriveUploadTimeout
+}
+
+
+func (c *Config) GetKeycloakIssuerURL() string {
+    return c.IssuerURL
+}
+
+func (c *Config) GetKeycloakClientID() string {
+    return c.ClientID
+}
+
+func (c *Config) GetKeycloakClientSecret() string {
+    return c.ClientSecret
 }

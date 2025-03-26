@@ -4,9 +4,9 @@
   "version": "3.0.10",
   "type": "module",
   "scripts": {
-    "dev": "vite --strictPort --force",
+    "dev": "vite --strictPort --force --host",
     "build-self": "tsc && vite build",
-    "preview": "vite preview",
+    "preview": "vite preview --host",
     "lint": "eslint \"./src/**/**.{ts,tsx}\" --config \".eslintrc.cjs\"",
     "lint:fix": "eslint --fix \"./src/**/**.{ts,tsx}\" --config \".eslintrc.cjs\"",
     "format": "prettier --write \"src/**/*.{ts,tsx}\""

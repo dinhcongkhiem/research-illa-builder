@@ -40,6 +40,7 @@ const (
 	CAN_DELETE            = "/accessControl/teams/%s/unitType/%s/unitID/%s/attribute/canDelete/%s"
 	// data control part
 	GET_USER               = "/dataControl/users/%s"
+	GET_USER_BY_EMAIL 	   = "/dataControl/users?email=%s"
 	GET_MULTI_USER         = "/dataControl/users/multi/%s"
 	GET_TEAM_BY_IDENTIFIER = "/dataControl/teams/byIdentifier/%s"
 	GET_TEAM_BY_ID         = "/dataControl/teams/%d"
@@ -232,6 +233,35 @@ func (supervisor *Supervisor) GetUser(targetUserID int) (string, error) {
 	}
 	return resp.String(), nil
 }
+
+func (supervisor *Supervisor) GetUserByEmail(email string) (string, error) {
+    log.Printf("[INFO] GetUserByEmail - Looking up user with email: %s", email)
+    
+    client := resty.New()
+    requestToken := supervisor.Validator.GenerateValidateToken(email)
+    
+    resp, err := client.R().
+        SetHeader("Request-Token", requestToken).
+        Get(supervisor.API + fmt.Sprintf(GET_USER_BY_EMAIL, email))
+    
+    if err != nil {
+        log.Printf("[ERROR] GetUserByEmail - HTTP request failed: %v", err)
+        return "", fmt.Errorf("request illa supervisor failed: %w", err)
+    }
+    
+    log.Printf("[INFO] GetUserByEmail - Response status code: %d", resp.StatusCode())
+    
+    if resp.StatusCode() != http.StatusOK {
+        log.Printf("[ERROR] GetUserByEmail - Request failed with status code: %d", resp.StatusCode())
+        return "", errors.New("validate failed or user not found")
+    }
+    
+    log.Printf("[INFO] GetUserByEmail - Successfully retrieved user")
+    return resp.String(), nil
+}
+
+
+
 
 func (supervisor *Supervisor) GetMultiUser(targetUserIDsInString string) (string, error) {
 	client := resty.New()

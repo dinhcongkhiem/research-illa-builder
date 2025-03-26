@@ -24,7 +24,7 @@ RUN CGO_ENABLED=1 GOOS=linux go build -o supervisor-backend-internal ./src/cmd/i
 FROM alpine:latest
 
 # Install necessary runtime packages
-RUN apk add --no-cache ca-certificates tzdata
+RUN apk add --no-cache ca-certificates tzdata bash curl
 
 # Set working directory
 WORKDIR /app

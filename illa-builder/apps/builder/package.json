@@ -7,10 +7,10 @@
   "license": "Apache-2.0",
   "version": "4.8.3",
   "scripts": {
-    "dev": "vite --strictPort --force",
+    "dev": "vite --strictPort --force --host",
     "build-cloud": "NODE_OPTIONS=--max-old-space-size=12288  vite build --mode cloud",
     "build-self": "NODE_OPTIONS=--max-old-space-size=12288  vite build --mode self",
-    "preview": "vite preview",
+    "preview": "vite preview --host",
     "ts-check": "tsc --noEmit",
     "gen:protobuf": "pnpm protoc --ts_out ./src/api/ws/ --proto_path protos protos/ILLA_PROTO.proto"
   },

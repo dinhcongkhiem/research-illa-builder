@@ -11,7 +11,7 @@
     "dev:self": "turbo run dev --filter=illa-builder --filter=illa-cloud-fe",
     "build-cloud": "NODE_OPTIONS=--max-old-space-size=12288 turbo run build-cloud --filter=illa-builder",
     "build-self": "NODE_OPTIONS=--max-old-space-size=12288 turbo run build-self --filter=illa-builder --filter=illa-cloud-fe",
-    "prepare": "husky install",
+    "preview:self": "turbo run preview --filter=illa-builder --filter=illa-cloud-fe",
     "format": "prettier --write \"apps/**/*.{ts,tsx}\"",
     "lint": "eslint \"apps/**/src/**/**.{ts,tsx}\" --config \".eslintrc.js\"",
     "lint:fix": "eslint --fix \"apps/**/src/**/**.{ts,tsx}\" --config \".eslintrc.js\"",

@@ -14,7 +14,6 @@
     "bs": "turbo run bs --filter=storybook",
     "lint": "eslint packages/**/src/ --ext .ts,.tsx --config .eslintrc.js",
     "format": "prettier --write \"packages/**/*.{ts,tsx}\"",
-    "prepare": "husky install",
     "plop": "plop new",
     "plop-icon": "plop new-icon"
   },
